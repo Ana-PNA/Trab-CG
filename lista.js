@@ -1,0 +1,38 @@
+
+const modelos = [
+    "barrel", "bucket_arrows", "bucket_empty", "bucket_water", "building_archeryrange_blue",
+    "building_archeryrange_green", "building_archeryrange_red", "building_archeryrange_yellow",
+    "building_barracks_blue", "building_barracks_green", "building_barracks_red", "building_barracks_yellow",
+    "building_blacksmith_blue", "building_blacksmith_green", "building_blacksmith_red", "building_blacksmith_yellow",
+    "building_bridge_A", "building_bridge_B", "building_castle_blue", "building_castle_green", "building_castle_red",
+    "building_castle_yellow", "building_church_blue", "building_church_green", "building_church_red",
+    "building_church_yellow", "building_destroyed", "building_dirt", "building_grain", "building_home_A_blue",
+    "building_home_A_green", "building_home_A_red", "building_home_A_yellow", "building_home_B_blue",
+    "building_home_B_green", "building_home_B_red", "building_home_B_yellow", "building_lumbermill_blue",
+    "building_lumbermill_green", "building_lumbermill_red", "building_lumbermill_yellow",
+    "building_market_blue", "building_market_green", "building_market_red", "building_market_yellow",
+    "building_mine_blue", "building_mine_green", "building_mine_red", "building_mine_yellow",
+    "building_scaffolding", "building_stage_A", "building_stage_B", "building_stage_C",
+    "building_tavern_blue", "building_tavern_green", "building_tavern_red", "building_tavern_yellow",
+    "building_tower_A_blue", "building_tower_A_green", "building_tower_A_red", "building_tower_A_yellow",
+    "building_tower_base_blue", "building_tower_base_green", "building_tower_base_red", "building_tower_base_yellow",
+    "building_tower_B_blue", "building_tower_B_green", "building_tower_B_red", "building_tower_B_yellow",
+    "building_watermill_blue", "building_watermill_green", "building_watermill_red", "building_watermill_yellow",
+    "building_well_blue", "building_well_green", "building_well_red", "building_well_yellow",
+    "building_windmill_blue", "building_windmill_green", "building_windmill_red", "building_windmill_yellow",
+    "cloud_big", "cloud_small", "crate_A_big", "crate_A_small", "crate_B_big", "crate_B_small",
+    "crate_long_A", "crate_long_B", "crate_long_C", "crate_long_empty", "crate_open",
+    "fence_stone_straight", "fence_wood_straight", "flag_blue", "flag_green", "flag_red", "flag_yellow",
+    "hex_grass", "hex_grass_bottom", "hex_grass_sloped_high", "hex_grass_sloped_low",
+    "hex_water", "hex_coast_A", "hex_coast_B", "hex_coast_C", "hex_coast_D", "hex_coast_E",
+    "hex_road_A", "hex_road_B", "hex_road_C", "hex_road_D", "hex_road_E",
+    "hills_A", "hills_B", "hills_C", "hill_single_A", "hill_single_B", "hill_single_C",
+    "ladder", "mountain_A", "mountain_B", "mountain_C", "pallet", "projectile_catapult",
+    "resource_lumber", "resource_stone", "rock_single_A", "rock_single_B", "rock_single_C",
+    "rock_single_D", "rock_single_E", "sack", "target", "tent",
+    "trees_A_large", "trees_A_medium", "trees_A_small", "trees_B_large", "trees_B_medium", "trees_B_small",
+    "tree_single_A", "tree_single_B", "wall_straight", "waterlily_A", "waterlily_B",
+    "waterplant_A", "waterplant_B", "waterplant_C", "weaponrack", "wheelbarrow"
+];
+
+export const modelNames = modelos;

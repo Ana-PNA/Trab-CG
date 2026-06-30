@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Editor de Cena WebGL2</title>
+  <style>
+    body { margin:0; min-height:100vh; display:flex; font-family:Arial,Helvetica,sans-serif;
+           background:#e8ebef; color:#222; }
+    #left,#right { width:280px; background:#fbfcfd; padding:14px; box-sizing:border-box;
+                   overflow:auto; max-height:100vh; }
+    #left  { border-right:1px solid #d3d7dd; }
+    #right { border-left:1px solid #d3d7dd; }
+    #main  { flex:1; display:flex; flex-direction:column; min-height:0; position:relative; }
+    #canvasWrapper { flex:1; min-height:0; background:#1d232b; }
+    canvas#glcanvas { width:100%; height:100%; display:block; }
+    h3,h4 { margin:0 0 10px; font-weight:600; }
+    #objectList, #objectList ul { list-style:none; padding:0; margin:0 0 6px; }
+    #objectList ul { margin-left:14px; border-left:2px solid #d6deea; padding-left:8px; margin-top:4px; }
+    #objectList li { padding:6px 8px; border-radius:6px; margin-bottom:4px; background:#fff;
+                     cursor:pointer; border:1px solid #e6ebf0; font-size:12px;
+                     display:flex; align-items:center; gap:6px; }
+    #objectList li:hover, #objectList li.selected { background:#eaf3ff; border-color:#a69cff; }
+    #objectList li .name { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    #objectList li .badge { font-size:10px; color:#6a7184; }
+    #thumbsEl { display:grid; grid-template-columns:repeat(auto-fill,minmax(86px,1fr)); gap:8px; }
+    .thumb-card { border:1px solid #d7dde5; border-radius:8px; overflow:hidden; background:#fff;
+                  cursor:pointer; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,.08);
+                  display:flex; flex-direction:column; }
+    .thumb-card:hover { border-color:#1976d2; }
+    .thumb-card canvas { width:80px; height:80px; display:block; margin:0 auto; background:#111; }
+    .thumb-card span  { display:block; padding:4px 2px; font-size:10px; word-break:break-all; line-height:1.1; }
+    label { display:block; font-size:12px; margin-top:8px; color:#555; }
+    input[type="number"], input[type="range"], input[type="file"], button {
+      width:100%; box-sizing:border-box; margin-top:3px; }
+    input[type="number"] { padding:6px; border:1px solid #c9c9db; border-radius:6px; font-size:12px; }
+    button { border:none; border-radius:8px; padding:9px; background:#1976d2; color:#fff;
+             font-weight:600; cursor:pointer; margin-top:8px; font-size:13px; }
+    button:hover { background:#125fa7; }
+    button.danger { background:#f43636; }
+    button.accent { background:#5f4dff; }
+    .divider { height:1px; background:#d3d7dd; margin:12px 0; }
+    .row3 { display:grid; grid-template-columns:repeat(3,1fr); gap:4px; }
+    #status { position:absolute; top:8px; left:8px; color:#fff; background:rgba(0,0,0,.5);
+              padding:4px 8px; border-radius:4px; font-size:12px; pointer-events:none; }
+  </style>
+</head>
+<body>
+  <div id="left">
+    <h3>Hierarquia da Cena</h3>
+    <ul id="objectList"></ul>
+    <label>Anexar selecionado a (pai)</label>
+    <select id="parentSelect" style="width:100%;padding:6px;border:1px solid #c9c9db;border-radius:6px;font-size:12px;background:#fff;">
+      <option value="">(Raiz da cena)</option>
+    </select>
+    <button id="btn-excluir" class="danger">Excluir Selecionado (e filhos)</button>
+    <div class="divider"></div>
+
+    <h4>Transformações</h4>
+    <label>Posição (X / Y / Z)</label>
+    <div class="row3">
+      <input id="posX" type="number" step="0.1" value="0">
+      <input id="posY" type="number" step="0.1" value="0">
+      <input id="posZ" type="number" step="0.1" value="0">
+    </div>
+    <label>Rotação em graus (X / Y / Z)</label>
+    <div class="row3">
+      <input id="rotX" type="number" step="1" value="0">
+      <input id="rotY" type="number" step="1" value="0">
+      <input id="rotZ" type="number" step="1" value="0">
+    </div>
+    <label>Escala (X / Y / Z)</label>
+    <div class="row3">
+      <input id="scaleX" type="number" step="0.1" value="1">
+      <input id="scaleY" type="number" step="0.1" value="1">
+      <input id="scaleZ" type="number" step="0.1" value="1">
+    </div>
+
+    <div class="divider"></div>
+    <h4>Animação</h4>
+    <label>Destino (X / Y / Z)</label>
+    <div class="row3">
+      <input id="animTX" type="number" step="0.1" value="0">
+      <input id="animTY" type="number" step="0.1" value="0">
+      <input id="animTZ" type="number" step="0.1" value="0">
+    </div>
+    <label>Velocidade: <span id="animSpeedVal">1.0</span></label>
+    <input id="animSpeed" type="range" min="0" max="5" step="0.1" value="1">
+    <button id="btnPlay" class="accent">Play</button>
+    <button id="btnStop" class="danger">Stop</button>
+    <label for="textureInput">Trocar Textura:</label>
+    <input type="file" id="textureInput" accept="image/*">
+   
+  </div>
+
+  <div id="main">
+    <div id="canvasWrapper">
+      <canvas id="glcanvas"></canvas>
+    </div>
+    <div id="status">Carregando modelos…</div>
+  </div>
+
+  <div id="right">
+    <h3>Biblioteca de Modelos</h3>
+    <label>Quantidade a carregar</label>
+    <input id="loadCount" type="number" min="1" max="500" value="24">
+    <button id="loadPackage">Carregar Modelos</button>
+    <div class="divider"></div>
+    <div id="thumbsEl"></div>
+    <div class="divider"></div>
+    <button id="saveScene">Salvar cena (JSON)</button>
+    <label>Carregar cena</label>
+    <input id="loadScene" type="file" accept=".json">
+  </div>
+
+  <script type="module" src="./script.js"></script>
+</body>
+</html>
